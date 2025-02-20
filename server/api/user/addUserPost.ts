@@ -12,7 +12,6 @@ export default defineEventHandler(async (event) => {
 
   try {
     if (post) {
-      console.log("新增資料...");
       const body = await readBody(event);
       const newUser = new User({
         name: body.name,
