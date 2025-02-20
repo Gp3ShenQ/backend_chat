@@ -2,7 +2,7 @@ import { H3Event, sendError } from "h3";
 import bcrypt from "bcrypt";
 
 import connectDB from "~/server/db/mongoose";
-import User from "~/server/models/user_models/User";
+import Login from "~/server/models/user_models/Login";
 
 const saltRounds = 10;
 
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event: H3Event) => {
       const salt = await bcrypt.genSalt(saltRounds);
       const hash = await bcrypt.hash(password, salt);
 
-      const newUser = new User({
+      const newUser = new Login({
         account,
         email,
         password: hash,
