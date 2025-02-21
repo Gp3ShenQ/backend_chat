@@ -1,4 +1,4 @@
-import { H3Event, sendError } from "h3";
+import { sendError, readBody, defineEventHandler } from "h3";
 import bcrypt from "bcrypt";
 
 import connectDB from "~/server/db/mongoose";
@@ -6,26 +6,37 @@ import Login from "~/server/models/user_models/Login";
 
 const saltRounds = 10;
 
-export default defineEventHandler(async (event: H3Event) => {
+export default defineEventHandler(async (event) => {
   await connectDB();
 
   const post = event.node.req.method === "POST";
 
+  const body = await readBody(event);
+  const { account } = body;
+  console.log(body.account, typeof body.account);
+
+  const existingUser = await Login.findOne({ account });
+  console.log("existingUser", existingUser);
+  if (existingUser) {
+    return sendError(
+      event,
+      createError({ statusCode: 409, statusMessage: "帳號已存在" })
+    );
+  }
+
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hash = await bcrypt.hash(body.password, salt);
+
   try {
     if (post) {
-      const body = await readBody(event);
-      const { account, email, password } = body;
-      const salt = await bcrypt.genSalt(saltRounds);
-      const hash = await bcrypt.hash(password, salt);
-
       const newUser = new Login({
-        account,
-        email,
+        account: body.account || undefined,
+        email: body.email || undefined,
         password: hash,
       });
 
       await newUser.save();
-      return { message: "註冊成功" };
+      return { statusCode: 200, message: "註冊成功" };
     }
   } catch (err) {
     return sendError(

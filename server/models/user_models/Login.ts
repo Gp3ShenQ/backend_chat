@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 const LoginSchema = new mongoose.Schema({
   account: {
     type: String,
-    required: false,
+    required: function () {
+      return !this.email;
+    },
   },
   password: {
     type: String,
@@ -11,7 +13,9 @@ const LoginSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: false,
+    required: function () {
+      return !this.account;
+    },
   },
 });
 
