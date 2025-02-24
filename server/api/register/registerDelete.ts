@@ -1,6 +1,6 @@
 import { defineEventHandler } from "h3";
 import connectDB from "~/server/db/mongoose";
-import Login from "~/server/models/user_models/Login";
+import User from "~/server/models/user_models/User";
 
 export default defineEventHandler(async (event) => {
   await connectDB();
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const del = event.node.req.method === "DELETE";
 
   if (del) {
-    const result = await Login.deleteMany({});
+    const result = await User.deleteMany({});
     return { message: `${result.deletedCount} users were deleted.` };
   } else {
     return { message: "Unsupported request method" };

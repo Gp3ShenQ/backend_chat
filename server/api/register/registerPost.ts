@@ -2,7 +2,7 @@ import { sendError, readBody, defineEventHandler } from "h3";
 import bcrypt from "bcrypt";
 
 import connectDB from "~/server/db/mongoose";
-import Login from "~/server/models/user_models/Login";
+import User from "~/server/models/user_models/User";
 
 const saltRounds = 10;
 
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   const { account } = body;
   console.log(body.account, typeof body.account);
 
-  const existingUser = await Login.findOne({ account });
+  const existingUser = await User.findOne({ account });
   console.log("existingUser", existingUser);
   if (existingUser) {
     return sendError(
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     if (post) {
-      const newUser = new Login({
+      const newUser = new User({
         account: body.account || undefined,
         email: body.email || undefined,
         password: hash,

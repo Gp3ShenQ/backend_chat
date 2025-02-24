@@ -1,6 +1,6 @@
 import { defineEventHandler } from "h3";
 import connectDB from "~/server/db/mongoose";
-import Login from "~/server/models/user_models/Login";
+import User from "~/server/models/user_models/User";
 
 export default defineEventHandler(async (event) => {
   await connectDB();
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const get = event.node.req.method === "GET";
 
   if (get) {
-    const LoginAccount = await Login.find({}, { account: 1, _id: 0 });
-    return { ...LoginAccount };
+    const UserEmail = await User.find({}, { email: 1, _id: 0 });
+    return { ...UserEmail };
   }
 });

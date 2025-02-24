@@ -1,4 +1,4 @@
-import { defineEventHandler, sendError } from "h3";
+import { defineEventHandler, sendError, createError } from "h3";
 import connectDB from "~/server/db/mongoose";
 import User from "~/server/models/user_models/User";
 
@@ -15,10 +15,14 @@ export default defineEventHandler(async (event) => {
         message: `User with name ${body.name} was deleted.`,
       };
     } else {
-      return sendError(event, {
-        statusCode: 404,
-        statusMessage: `用戶 ${body.name} 不存在`,
-      });
+      // 使用 createError 函式來創建 Error 物件
+      return sendError(
+        event,
+        createError({
+          statusCode: 404,
+          statusMessage: `用戶 ${body.name} 不存在`,
+        })
+      );
     }
   }
 });
