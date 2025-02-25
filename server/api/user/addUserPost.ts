@@ -36,9 +36,12 @@ export default defineEventHandler(async (event) => {
 
       if (existingUser) {
         // 更新現有使用者資料
-        existingUser.name = body.name;
-        existingUser.age = body.age;
-        existingUser.email = body.email;
+
+        existingUser.name = existingUser.name || body.name;
+        existingUser.age = existingUser.age || body.age;
+        existingUser.email = existingUser.email || body.email;
+        existingUser.account = existingUser.account || body.account;
+
         await existingUser.save();
         return { message: `Hello, ${existingUser.name}! User updated in DB.` };
       } else {

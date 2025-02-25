@@ -7,13 +7,17 @@ export default defineEventHandler(async (event) => {
 
   if (event.node.req.method === "POST") {
     const body = await readBody(event);
-    const result = await User.findOne({ account: body.account });
+
+    const _result = await User.findOne({
+      $or: [{ account: body.account }, { email: body.email }],
+    });
 
     try {
-      if (result) {
+      if (_result) {
         return {
           statusCode: 200,
           message: `User with name ${body.name} was deleted.`,
+          user: _result,
         };
       }
     } catch (error) {
