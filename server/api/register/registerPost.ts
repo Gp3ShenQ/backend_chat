@@ -9,10 +9,11 @@ import { defineEventHandler } from "h3";
 
 export default defineEventHandler(async (event) => {
 
-event.node.res.statusCode = 500
-event.node.res.end(JSON.stringify({massage : "註冊成功"}))
+  event.node.res.statusCode = 500; // 設置狀態碼
+  event.node.res.setHeader('Content-Type', 'application/json');
+  event.node.res.end(JSON.stringify({ message: "註冊成功" })); // 結束回應
 
-  return { statusCode: 500, message: "註冊成功" , status: event.node.res.statusCode};
+
   // await connectDB();
 
   // const post = event.node.req.method === "POST";
