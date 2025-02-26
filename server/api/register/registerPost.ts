@@ -10,7 +10,7 @@ import { defineEventHandler } from "h3";
 export default defineEventHandler(async (event) => {
 
   event.node.res.statusCode = 500; // 設置狀態碼
-  event.node.res.setHeader('Content-Type', 'application/json');
+  event.node.res.setHeader('Access-Control-Allow-Origin', '*'); // 或指定你的前端域名
   event.node.res.end(JSON.stringify({ message: "註冊成功" })); // 結束回應
 
 
