@@ -1,47 +1,53 @@
-import { sendError, readBody, defineEventHandler } from "h3";
-import bcrypt from "bcrypt";
+// import { sendError, readBody, defineEventHandler } from "h3";
+import { defineEventHandler } from "h3";
+// import bcrypt from "bcrypt";
 
-import connectDB from "~/server/db/mongoose";
-import User from "~/server/models/user_models/User";
+// import connectDB from "~/server/db/mongoose";
+// import User from "~/server/models/user_models/User";
 
-const saltRounds = 10;
+// const saltRounds = 10;
 
 export default defineEventHandler(async (event) => {
-  await connectDB();
 
-  const post = event.node.req.method === "POST";
+event.node.res.statusCode = 500
+event.node.res.end(JSON.stringify({massage : "註冊成功"}))
 
-  const body = await readBody(event);
-  const { account } = body;
-  console.log(body.account, typeof body.account);
+  return { statusCode: 500, message: "註冊成功" , status: event.node.res.statusCode};
+  // await connectDB();
 
-  const existingUser = await User.findOne({ account });
-  console.log("existingUser", existingUser);
-  if (existingUser) {
-    return sendError(
-      event,
-      createError({ statusCode: 409, statusMessage: "帳號已存在" })
-    );
-  }
+  // const post = event.node.req.method === "POST";
 
-  const salt = await bcrypt.genSalt(saltRounds);
-  const hash = await bcrypt.hash(body.password, salt);
+  // const body = await readBody(event);
+  // const { account } = body;
+  // console.log(body.account, typeof body.account);
 
-  try {
-    if (post) {
-      const newUser = new User({
-        account: body.account || undefined,
-        email: body.email || undefined,
-        password: hash,
-      });
+  // const existingUser = await User.findOne({ account });
+  // console.log("existingUser", existingUser);
+  // if (existingUser) {
+  //   return sendError(
+  //     event,
+  //     createError({ statusCode: 409, statusMessage: "帳號已存在" })
+  //   );
+  // }
 
-      await newUser.save();
-      return { statusCode: 200, message: "註冊成功" };
-    }
-  } catch (err) {
-    return sendError(
-      event,
-      createError({ statusCode: 500, statusMessage: err.message })
-    );
-  }
+  // const salt = await bcrypt.genSalt(saltRounds);
+  // const hash = await bcrypt.hash(body.password, salt);
+
+  // try {
+  //   if (post) {
+  //     const newUser = new User({
+  //       account: body.account || undefined,
+  //       email: body.email || undefined,
+  //       password: hash,
+  //     });
+
+  //     await newUser.save();
+  //     return { statusCode: 200, message: "註冊成功" };
+  //   }
+  // } catch (err) {
+  //   return sendError(
+  //     event,
+  //     createError({ statusCode: 500, statusMessage: err.message })
+  //   );
+  // }
 });
