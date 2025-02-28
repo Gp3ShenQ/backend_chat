@@ -5,15 +5,19 @@ import connectDB from "~/server/db/mongoose";
 export default defineEventHandler(async (event) => {
   // await connectDB();
 
-  event.node.res.statusCode = 500; // 設置狀態碼
-  event.node.res.setHeader('Access-Control-Allow-Origin', '*'); // 或指定你的前端域名
-  event.node.res.end(JSON.stringify({ message: "註冊成功" })); // 結束回應
+  const name = getRouterParam(event, "name");
 
-  const get = event.node.req.method === "GET";
+  return `Hello,${ name }`;
 
-  if (get) {
+  // event.node.res.statusCode = 500; // 設置狀態碼
+  // event.node.res.setHeader('Access-Control-Allow-Origin', '*'); // 或指定你的前端域名
+  // event.node.res.end(JSON.stringify({ message: "註冊成功" })); // 結束回應
+
+  // const get = event.node.req.method === "GET";
+
+  // if (get) {
     // const UserAccount = await User.find({}, { account: 1, _id: 0 });
     // return { ...UserAccount };
     
-  }
+  // }
 });

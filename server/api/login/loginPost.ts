@@ -7,10 +7,12 @@ import bcrypt from "bcrypt"; // 假設使用 bcrypt 進行密碼加密驗證
 export default defineEventHandler(async (event) => {
   await connectDB();
 
+
   const post = event.node.req.method === "POST";
 
   try {
     if (post) {
+      console.log("postinner");
       const body = await readBody(event);
       const { account, email, password } = body;
 
