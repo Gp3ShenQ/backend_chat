@@ -17,6 +17,7 @@
     "mongoose": "^8.10.0",
     "nuxt": "^3.15.4",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "ws": "^8.18.1"
   }
 }
